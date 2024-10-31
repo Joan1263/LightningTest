@@ -32,12 +32,12 @@
 			display: block;
 		}
 		
-     	#scene-1 { background-image: url('/Lightning/Assets/SceneGrass.png'); }
-    	#scene-2 { background-image: url('/Assets/SceneCity1.png'); }
-    	#scene-3 { background-image: url('/Assets/SceneCity2.png'); }
-    	#scene-4 { background-image: url('/Assets/SceneYard.png'); }
-    	#scene-5 { background-image: url('/Assets/SceneBrick.png'); }
-     	#scene-6 { background-image: url('/Assets/SceneDefault.png'); }
+     	#scene-1 { background-image: url('Assets/SceneGrass.png'); }
+    	#scene-2 { background-image: url('Assets/SceneCity1.png'); }
+    	#scene-3 { background-image: url('Assets/SceneCity2.png'); }
+    	#scene-4 { background-image: url('Assets/SceneYard.png'); }
+    	#scene-5 { background-image: url('Assets/SceneBrick.png'); }
+     	#scene-6 { background-image: url('Assets/SceneDefault.png'); }
 		
 		#gradientLeft {
 			position: fixed; 
@@ -113,25 +113,25 @@
 </head>
 <body>
 	<canvas id="lightningCanvas"></canvas>
- 	<img id="touchCloud" src="/Local/StempunkV2/Assets/Ollie.png" data-gif-src="/Local/StempunkV2/Assets/Ollie.gif" data-default-src="/Local/StempunkV2/Assets/Ollie.png" alt="Touch Cloud">
-	<audio id="thunderSound" src="/Local/StempunkV2/Assets/thunder.mp3"></audio>
+ 	<img id="touchCloud" src="Assets/Ollie.png" data-gif-src="Assets/Ollie.gif" data-default-src="Assets/Ollie.png" alt="Touch Cloud">
+	<audio id="thunderSound" src="Assets/thunder.mp3"></audio>
 	<div id="gradientLeft"></div>
 	<div id="gradientRight"></div>
 	<div id="scene-1" class="scene active"></div>
   	<div id="scene-2" class="scene">
-		<img id="centerObj" src="/Local/StempunkV2/Assets/Tree.png" data-default-src="/Local/StempunkV2/Assets/Tree.png" data-gif-src="/Local/StempunkV2/Assets/GIF/TreeStrike.gif" alt="Tree" height="500">
+		<img id="centerObj" src="Assets/Tree.png" data-default-src="Assets/Tree.png" data-gif-src="Assets/GIF/TreeStrike.gif" alt="Tree" height="500">
 	</div>
   	<div id="scene-3" class="scene">
-		<img id="centerObj" src="/Local/StempunkV2/Assets/BuildingC.png" alt="Building Center" height="400">
-		<img id="leftObj" src="/Local/StempunkV2/Assets/Building1.png" data-default-src="/Local/StempunkV2/Assets/Building1.png" data-gif-src="/Local/StempunkV2/Assets/GIF/Building1Strike.gif" alt="Building Left" height="500">
-		<img id="rightObj" src="/Local/StempunkV2/Assets/Building2.png" data-default-src="/Local/StempunkV2/Assets/Building2.png" data-gif-src="/Local/StempunkV2/Assets/GIF/Building2Strike.gif" alt="Building Right" height="500">
+		<img id="centerObj" src="Assets/BuildingC.png" alt="Building Center" height="400">
+		<img id="leftObj" src="Assets/Building1.png" data-default-src="Assets/Building1.png" data-gif-src="Assets/GIF/Building1Strike.gif" alt="Building Left" height="500">
+		<img id="rightObj" src="Assets/Building2.png" data-default-src="Assets/Building2.png" data-gif-src="Assets/GIF/Building2Strike.gif" alt="Building Right" height="500">
 	</div>
   	<div id="scene-4" class="scene">
-		<img id="leftObj" src="/Local/StempunkV2/Assets/Tire.png" alt="Tire" height="250">
-		<img id="rightObj" src="/Local/StempunkV2/Assets/Car.png" data-default-src="/Local/StempunkV2/Assets/Car.png" data-gif-src="/Local/StempunkV2/Assets/GIF/CarStrike.gif" alt="Car" height="350">
+		<img id="leftObj" src="Assets/Tire.png" alt="Tire" height="250">
+		<img id="rightObj" src="Assets/Car.png" data-default-src="Assets/Car.png" data-gif-src="Assets/GIF/CarStrike.gif" alt="Car" height="350">
 	</div>
   	<div id="scene-5" class="scene">
-		<img id="centerObj" src="/Local/StempunkV2/Assets/Bin.png" data-default-src="/Local/StempunkV2/Assets/GIF/BinFire.gif" data-gif-src="/Local/StempunkV2/Assets/GIF/BinStrike.gif" alt="Bin" height="500">
+		<img id="centerObj" src="Assets/Bin.png" data-default-src="Assets/GIF/BinFire.gif" data-gif-src="Assets/GIF/BinStrike.gif" alt="Bin" height="500">
 	</div>
  	<div id="scene-6" class="scene"></div>
 	<script>
