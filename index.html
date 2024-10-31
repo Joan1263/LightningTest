@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ 	<style>
+		html, body {
+       	margin: 0;
+        	padding: 0;
+      		height: 100vw;
+       	width: 100vh;
+         	overflow: hidden;
+        	position: static;
+         	-webkit-touch-callout: none;
+       	-webkit-user-select: none;
+        	user-select: none;
+        	touch-action: none;
+  		}
+
+		.scene {
+			position: absolute;
+			width: 100vw;
+			height: 100vh;
+			transition: transform 2s linear;
+			display: none;
+			background-size: cover;
+			background-position: bottom;
+			z-index: 1;
+		}
+		
+		.active {
+			display: block;
+		}
+		
+     	#scene-1 { background-image: url('/Local/StempunkV2/Assets/SceneGrass.png'); }
+    	#scene-2 { background-image: url('/Local/StempunkV2/Assets/SceneCity1.png'); }
+    	#scene-3 { background-image: url('/Local/StempunkV2/Assets/SceneCity2.png'); }
+    	#scene-4 { background-image: url('/Local/StempunkV2/Assets/SceneYard.png'); }
+    	#scene-5 { background-image: url('/Local/StempunkV2/Assets/SceneBrick.png'); }
+     	#scene-6 { background-image: url('/Local/StempunkV2/Assets/SceneDefault.png'); }
+		
+		#gradientLeft {
+			position: fixed; 
+      		width: 200px;
+      		height: 100vh;
+			left: 0;
+      		background: linear-gradient( 
+				to right,
+        		rgba(255, 255, 255, 0.8),
+        		rgba(255, 255, 255, 0)
+      		);
+      		z-index: 15;
+			display: none;
+    	}
+
+		#gradientRight {
+			position: fixed;
+      		width: 200px;
+      		height: 100vh;
+			right: 0;
+      		background: linear-gradient( 
+				to right,
+        		rgba(255, 255, 255, 0),
+        		rgba(255, 255, 255, 0.8)
+      		);
+      		z-index: 15;
+			display: none;
+    	}
+        
+  		#touchCloud {
+       	position: absolute;
+        	width: 350px;
+         	height: auto;
+         	display: none;
+         	z-index: 14;
+        	pointer-events: none;
+         	transform-origin: center center;
+     	}
+
+     	#lightningCanvas {
+         	position: fixed;
+        	width: 100vw;
+         	height: 100vh;
+         	z-index: 5;
+         	pointer-events: none;
+    	}
+
+		#centerObj {
+			position: fixed;
+			width: auto;
+			z-index: 4;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%) 
+		}
+		
+		#leftObj {
+			position: fixed;
+			width: auto;
+			z-index: 4;
+			bottom: 0;
+			left: 20px;
+		}
+		
+		#rightObj {
+			position: fixed;
+			width: auto;
+			z-index: 4;
+			bottom: 0;
+			right: 20px;
+		}
+ 	</style>
+</head>
+<body>
+	<canvas id="lightningCanvas"></canvas>
+ 	<img id="touchCloud" src="/Local/StempunkV2/Assets/Ollie.png" data-gif-src="/Local/StempunkV2/Assets/Ollie.gif" data-default-src="/Local/StempunkV2/Assets/Ollie.png" alt="Touch Cloud">
+	<audio id="thunderSound" src="/Local/StempunkV2/Assets/thunder.mp3"></audio>
+	<div id="gradientLeft"></div>
+	<div id="gradientRight"></div>
+	<div id="scene-1" class="scene active"></div>
+  	<div id="scene-2" class="scene">
+		<img id="centerObj" src="/Local/StempunkV2/Assets/Tree.png" data-default-src="/Local/StempunkV2/Assets/Tree.png" data-gif-src="/Local/StempunkV2/Assets/GIF/TreeStrike.gif" alt="Tree" height="500">
+	</div>
+  	<div id="scene-3" class="scene">
+		<img id="centerObj" src="/Local/StempunkV2/Assets/BuildingC.png" alt="Building Center" height="400">
+		<img id="leftObj" src="/Local/StempunkV2/Assets/Building1.png" data-default-src="/Local/StempunkV2/Assets/Building1.png" data-gif-src="/Local/StempunkV2/Assets/GIF/Building1Strike.gif" alt="Building Left" height="500">
+		<img id="rightObj" src="/Local/StempunkV2/Assets/Building2.png" data-default-src="/Local/StempunkV2/Assets/Building2.png" data-gif-src="/Local/StempunkV2/Assets/GIF/Building2Strike.gif" alt="Building Right" height="500">
+	</div>
+  	<div id="scene-4" class="scene">
+		<img id="leftObj" src="/Local/StempunkV2/Assets/Tire.png" alt="Tire" height="250">
+		<img id="rightObj" src="/Local/StempunkV2/Assets/Car.png" data-default-src="/Local/StempunkV2/Assets/Car.png" data-gif-src="/Local/StempunkV2/Assets/GIF/CarStrike.gif" alt="Car" height="350">
+	</div>
+  	<div id="scene-5" class="scene">
+		<img id="centerObj" src="/Local/StempunkV2/Assets/Bin.png" data-default-src="/Local/StempunkV2/Assets/GIF/BinFire.gif" data-gif-src="/Local/StempunkV2/Assets/GIF/BinStrike.gif" alt="Bin" height="500">
+	</div>
+ 	<div id="scene-6" class="scene"></div>
+	<script>
+		const scenes = {
+      		'scene-1': { right: 'scene-2' },
+        	'scene-2': { left: 'scene-1', right: 'scene-3' },
+         	'scene-3': { left: 'scene-2', right: 'scene-4' },
+       	'scene-4': { left: 'scene-3', right: 'scene-5' },
+        	'scene-5': { left: 'scene-4', right: 'scene-6' },
+         	'scene-6': { left: 'scene-5', right: 'scene-7' },
+         	'scene-7': { left: 'scene-6' },
+     	};
+
+     	let currentScene = 'scene-1';
+		let edgeDetected = '';
+		let timeDetected = Date.now();
+		let changeDetected = false;
+	
+     	const cloud = document.getElementById('touchCloud');
+     	const canvas = document.getElementById('lightningCanvas');
+     	const ctx = canvas.getContext('2d');
+		const leftg = document.getElementById('gradientLeft');
+		const rightg = document.getElementById('gradientRight');
+
+     	function resizeCanvas() {
+      		canvas.width = window.innerWidth;
+        	canvas.height = window.innerHeight;
+     	}
+     	resizeCanvas();
+     	window.addEventListener('resize', resizeCanvas);
+
+     	let touchPoints = [];
+		let lastPosition = { x: 0, y: 0 };
+      	let shakeCount = 0;
+     	let lastShakeTime = Date.now();
+    	let shakeThreshold = 30;
+     	let shakeTimeout;
+     	let isShaking = false;
+
+		function detectEdge(x, y) {
+			const threshold = 250;
+			const width = window.innerWidth;
+			
+			if (x < threshold) {
+				leftg.style.display = 'block';
+				return 'left';
+			}
+			if (x > width - threshold) {
+				rightg.style.display = 'block';
+				return 'right';
+			}
+			rightg.style.display = 'none';
+			leftg.style.display = 'none';
+			return '';
+		}
+		
+		function changeScene(newEdge) {
+			if (newEdge !== edgeDetected) {
+				edgeDetected = newEdge;
+				timeDetected = Date.now();
+				changeDetected = true;
+			}
+			const timeChange = Date.now() - timeDetected;
+			if (changeDetected && timeChange > 1000) {
+				if (edgeDetected && scenes[currentScene][edgeDetected]) {
+             		const nextScene = scenes[currentScene][edgeDetected];
+               	if (nextScene) {
+               		document.getElementById(currentScene).classList.remove('active');
+                   	document.getElementById(nextScene).classList.add('active');
+                   	currentScene = nextScene;
+						rightg.style.display = 'none';
+						leftg.style.display = 'none';
+               	}
+
+               	edgeDetected = '';
+					changeDetected = false;
+          	}
+			}
+		}
+		
+		function gifEffect(obj) {
+			const object = document.getElementById(obj);
+			const objGif = object.getAttribute('data-gif-src');
+			object.src = objGif;
+			
+			setTimeout(() => {
+				const objDef = object.getAttribute('data-default-src');
+				object.src = objDef;
+								}, 500);
+		}
+		
+		function drawLightningForCurrentPage(centerX, centerY) {
+			switch(currentScene) {
+				case "scene-1":
+					drawLightning(centerX, centerY, centerX, 1000);
+					break;
+				case "scene-2":
+					drawLightning(centerX, centerY, 380, 700);
+					gifEffect('centerObj');
+					break;
+				case "scene-3":
+					if (centerX < 380){
+						drawLightning(centerX, centerY, 100, 650);
+						gifEffect('leftObj');
+					} else {
+						drawLightning(centerX, centerY, 650, 650);
+						gifEffect('rightObj');
+					}
+					break;
+				case "scene-4":
+					drawLightning(centerX, centerY, 550, 820);
+					gifEffect('rightObj');
+					break;
+				case "scene-5":
+					drawLightning(centerX, centerY, 380, 750);
+					gifEffect('centerObj');
+					break;
+			}
+		}
+
+     	function distance(point1, point2) {
+     		return Math.sqrt(
+         		Math.pow(point2.x - point1.x, 2) + 
+            	Math.pow(point2.y - point1.y, 2)
+ 			);
+     	}
+
+		function calculateRotationAngle(point1, point2) {
+			if (point1.x < point2.x){
+				return Math.atan2(point2.y - point1.y, point2.x - point1.x) * (180 / Math.PI);
+			} else {
+				return Math.atan2(point1.y - point2.y, point1.x - point2.x) * (180 / Math.PI);
+			}
+     	}
+
+    	function drawLightning(startX, startY, endX, endY) {
+      		ctx.clearRect(0, 0, canvas.width, canvas.height);
+         	ctx.beginPath();
+         	ctx.strokeStyle = '#FFD700';
+        	ctx.lineWidth = 15;
+
+         	let currentX = startX;
+         	let currentY = startY;
+         	const segments = 10;
+			const dx = endX - startX;
+			const segmentWidth = dx / segments;
+         	const dy = endY - startY;
+        	const segmentHeight = dy / segments;
+
+			ctx.moveTo(startX, startY);
+            
+        	for (let i = 0; i < segments; i++) {
+         		const nextY = startY + (i + 1) * segmentHeight;
+				const nextX = startX + (i + 1) * segmentWidth;
+          	const randX = nextX + (Math.random() - 0.5) * 50;
+            	ctx.lineTo(randX, nextY);
+           	currentX = randX;
+            	currentY = nextY;
+        	}
+            
+         	ctx.lineTo(endX, endY);
+        	ctx.stroke();
+
+			//Clear lightning after delay
+			setTimeout(() => {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+			}, 300);
+    	}
+
+		function detectShake(currentX, currentY) {
+			const moveDistance = Math.abs(currentX - lastPosition.x);
+			const currentTime = Date.now();
+			
+			if (moveDistance > shakeThreshold) {
+				if (!isShaking) {
+					isShaking = true;
+					if (currentTime - lastShakeTime < 1000) {
+						shakeCount++;
+						if (shakeCount === 5) {
+							const cloudGif = cloud.getAttribute('data-gif-src');
+							cloud.src = cloudGif;
+							
+							setTimeout(() => {
+								const cloudRect = cloud.getBoundingClientRect();
+								const cloudCenterX = cloudRect.left + cloudRect.width / 2;
+								const cloudBottom = cloudRect.bottom - 100;
+								drawLightningForCurrentPage(cloudCenterX, cloudBottom);
+								
+								thunderSound.currentTime = 0;
+          					thunderSound.play();
+							
+								shakeCount = 0;
+								lastShakeTime = currentTime;
+								
+								setTimeout(() => {
+									const cloudImg = cloud.getAttribute('data-default-src');
+									cloud.src = cloudImg;
+								}, 1000);
+							}, 1000);
+						}
+					} else {
+						shakeCount = 0;
+						lastShakeTime = currentTime;
+					}
+					
+					//Restart shake after delay
+					clearTimeout(shakeTimeout);
+					shakeTimeout = setTimeout(() => {
+						isShaking = false;
+					}, 100);
+				}
+			}
+			
+			lastPosition = { x: currentX, y: currentY };
+		}
+
+     	function handleTouch(e) {
+    		e.preventDefault();
+       	touchPoints = [];
+            
+        	for (let i = 0; i < e.touches.length; i++) {
+        		touchPoints.push({
+            		x: e.touches[i].clientX,
+               	y: e.touches[i].clientY
+            	});
+        	}
+
+       	if (touchPoints.length === 2) {
+       		const dist = distance(touchPoints[0], touchPoints[1]);
+                
+            	if (dist >= 200 && dist <= 250) {
+            		const centerX = (touchPoints[0].x + touchPoints[1].x) / 2;
+               	const centerY = (touchPoints[0].y + touchPoints[1].y) / 2;
+              	const angle = calculateRotationAngle(touchPoints[0], touchPoints[1]);
+                    
+               	cloud.style.display = 'block';
+              	cloud.style.left = (centerX - 193) + 'px';
+              	cloud.style.top = (centerY - 195) + 'px';
+               	cloud.style.transform = `rotate(${angle}deg)`;
+
+					detectShake(centerX, centerY);
+					
+					const newEdge = detectEdge(centerX, centerY);
+					changeScene(newEdge);
+           	}
+      		} 
+   		}
+
+     	document.addEventListener('touchstart', handleTouch);
+     	document.addEventListener('touchmove', handleTouch);
+     	document.addEventListener('touchend', (e) => {
+			if (e.touch.length === 0) {
+				shakeCount = 0;
+			}
+		});
+	</script>
+</body>
+</html>
