@@ -89,14 +89,14 @@
 </head>
 <body>
 	<canvas id="waterDropletCanvas"></canvas>
- 	<img id="touchCloud" src="/Local/StempunkV3/Assets/PNG/Ollie.png" alt="Touch Cloud">
+ 	<img id="touchCloud" src="Assets/PNG/Ollie.png" alt="Touch Cloud">
 	<div class="scene">
-		<img src="/Local/StempunkGit/Assets/Scene/Title.png" alt="Title scene">
+		<img src="Assets/Scene/Title.png" alt="Title scene">
 	</div>
 	<button class="startButton">
-		<img src="/Local/StempunkGit/Assets/PNG/Start.png" alt="Start">
+		<img src="Assets/PNG/Start.png" alt="Start">
 	</button>
-	<audio id="waterSound" src="/Local/StempunkGit/Assets/Audio/Water.mp3"></audio>
+	<audio id="waterSound" src="Assets/Audio/Water.mp3"></audio>
 	<div class="narrative"></div>
 	<script>
      	const cloud = document.getElementById('touchCloud');
@@ -166,7 +166,7 @@
 						cloudOpacity = Math.min(1, cloudOpacity + 0.1);
 						cloud.style.opacity = cloudOpacity;
 						
-						const waterSound = new Audio('/Local/StempunkV3/Assets/Audio/Water.mp3');
+						const waterSound = new Audio('Assets/Audio/Water.mp3');
             			waterSound.play();
 					}
 				}
@@ -177,7 +177,7 @@
 				cloud.style.opacity = 1;
 
 				setTimeout(() => {
-				window.location.href = '/Local/StempunkGit/story.html';
+				window.location.href = 'story.html';
 				}, 2000);
 			}
 		}
@@ -237,7 +237,7 @@
 			draw();
 			startBtn.style.display = 'none';
 			narrative.style.display = 'block';
-			scene.src = "/Local/StempunkGit/Assets/Scene/Sky.png";
+			scene.src = "Assets/Scene/Sky.png";
 		});
 		
 	</script>
