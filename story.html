@@ -32,12 +32,12 @@
 			display: block;
 		}
 		
-     	#scene-1 { background-image: url('/Local/StempunkGit/Assets/Scene/Grass.png'); }
-    	#scene-2 { background-image: url('/Local/StempunkGit/Assets/Scene/City1.png'); }
-    	#scene-3 { background-image: url('/Local/StempunkGit/Assets/Scene/City2.png'); }
-    	#scene-4 { background-image: url('/Local/StempunkGit/Assets/Scene/Yard.png'); }
-    	#scene-5 { background-image: url('/Local/StempunkGit/Assets/Scene/Brick.png'); }
-     	#scene-6 { background-image: url('/Local/StempunkGit/Assets/Scene/Default.png'); }
+     	#scene-1 { background-image: url('Assets/Scene/Grass.png'); }
+    	#scene-2 { background-image: url('Assets/Scene/City1.png'); }
+    	#scene-3 { background-image: url('Assets/Scene/City2.png'); }
+    	#scene-4 { background-image: url('Assets/Scene/Yard.png'); }
+    	#scene-5 { background-image: url('Assets/Scene/Brick.png'); }
+     	#scene-6 { background-image: url('Assets/Scene/Default.png'); }
 		
 		#gradientLeft {
 			position: fixed; 
@@ -130,25 +130,25 @@
 </head>
 <body>
 	<canvas id="lightningCanvas"></canvas>
- 	<img id="touchCloud" src="/Local/StempunkGit/Assets/PNG/Ollie.png" data-gif-src="/Local/StempunkGit/Assets/GIF/Ollie.gif" data-default-src="/Local/StempunkGit/Assets/PNG/OllieSad.png" alt="Touch Cloud">
-	<audio id="thunderSound" src="/Local/StempunkV2/Assets/thunder.mp3"></audio>
+ 	<img id="touchCloud" src="Assets/PNG/Ollie.png" data-gif-src="Assets/GIF/Ollie.gif" data-default-src="Assets/PNG/OllieSad.png" alt="Touch Cloud">
+	<audio id="thunderSound" src="Assets/Audio/Thunder.mp3"></audio>
 	<div id="gradientLeft"></div>
 	<div id="gradientRight"></div>
 	<div id="scene-1" class="scene active" data-description="scene 1"></div>
   	<div id="scene-2" class="scene" data-description="scene 2">
-		<img id="centerObj" src="/Local/StempunkV2/Assets/Tree.png" data-default-src="/Local/StempunkV2/Assets/Tree.png" data-gif-src="/Local/StempunkV2/Assets/GIF/TreeStrike.gif" alt="Tree" height="500">
+		<img id="centerObj" src="Assets/PNG/Tree.png" data-default-src="Assets/PNG/TreeAfter.png" data-gif-src="Assets/GIF/TreeStrike.gif" alt="Tree" height="500">
 	</div>
   	<div id="scene-3" class="scene" data-description="scene 3">
-		<img id="centerObj" src="/Local/StempunkV2/Assets/BuildingC.png" alt="Building Center" height="400">
-		<img id="leftObj" src="/Local/StempunkV2/Assets/Building1.png" data-default-src="/Local/StempunkV2/Assets/Building1.png" data-gif-src="/Local/StempunkV2/Assets/GIF/Building1Strike.gif" alt="Building Left" height="500">
-		<img id="rightObj" src="/Local/StempunkV2/Assets/Building2.png" data-default-src="/Local/StempunkV2/Assets/Building2.png" data-gif-src="/Local/StempunkV2/Assets/GIF/Building2Strike.gif" alt="Building Right" height="500">
+		<img id="centerObj" src="Assets/PNG/BuildingC.png" alt="Building Center" height="400">
+		<img id="leftObj" src="Assets/PNG/Building1.png" data-default-src="Assets/PNG/Building1After.png" data-gif-src="Assets/GIF/Building1Strike.gif" alt="Building Left" height="500">
+		<img id="rightObj" src="Assets/PNG/Building2.png" data-default-src="Assets/PNG/Building2After.png" data-gif-src="Assets/GIF/Building2Strike.gif" alt="Building Right" height="500">
 	</div>
   	<div id="scene-4" class="scene" data-description="scene 4">
-		<img id="leftObj" src="/Local/StempunkV2/Assets/Tire.png" alt="Tire" height="250">
-		<img id="rightObj" src="/Local/StempunkV2/Assets/Car.png" data-default-src="/Local/StempunkV2/Assets/Car.png" data-gif-src="/Local/StempunkV2/Assets/GIF/CarStrike.gif" alt="Car" height="350">
+		<img id="leftObj" src="Assets/PNG/Tire.png" alt="Tire" height="250">
+		<img id="rightObj" src="Assets/PNG/Car.png" data-default-src="Assets/PNG/Car.png" data-gif-src="Assets/PNG/CarStrike.gif" alt="Car" height="350">
 	</div>
   	<div id="scene-5" class="scene" data-description="scene 5">
-		<img id="centerObj" src="/Local/StempunkV2/Assets/Bin.png" data-default-src="/Local/StempunkV2/Assets/GIF/BinFire.gif" data-gif-src="/Local/StempunkV2/Assets/GIF/BinStrike.gif" alt="Bin" height="500">
+		<img id="centerObj" src="Assets/PNG/Bin.png" data-default-src="Assets/PNG/BinFire.gif" data-gif-src="Assets/GIF/BinStrike.gif" alt="Bin" height="500">
 	</div>
  	<div id="scene-6" class="scene" data-description="scene 6"></div>
 	<div class="narrative"></div>
