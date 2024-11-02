@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"><!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>Ollie the Lightning Cloud</title>
+ 	<style>
+		html, body {
+       	margin: 0;
+        	padding: 0;
+      		height: 100vw;
+       	width: 100vh;
+         	overflow: hidden;
+        	position: static;
+         	-webkit-touch-callout: none;
+       	-webkit-user-select: none;
+        	user-select: none;
+        	touch-action: none;
+  		}
+
+		.scene {
+			position: absolute;
+			width: 100vw;
+			height: 100vh;
+			z-index: 1;
+		}
+		
+		.scene img{
+			position: absolute;
+			width: 100vw;
+			height: 100vh;
+		}
+		
+		.narrative {
+			position: absolute;
+			background: rgba(255, 255, 255, 0.2);
+        	padding: 40px;
+        	border-radius: 50px;
+        	display: none;
+        	top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+        	color: DarkSlateGrey;
+         	text-align: center;
+			line-height: 1.5;
+			font-family: Marker Felt, fantasy;
+			font-size: 30px;
+         	z-index: 3;
+		}
+
+		canvas {
+         	position: fixed;
+        	width: 100%;
+         	height: 100%;
+         	z-index: 2;
+         	pointer-events: none;
+    	}
+        
+  		#touchCloud {
+       	position: absolute;
+        	width: 350px;
+         	height: auto;
+         	display: none;
+         	z-index: 15;
+        	pointer-events: none;
+         	transform-origin: center center;
+     	}
+
+		.startButton {
+			position: absolute;
+			bottom: 8%;
+			left: 50%;
+			width: 200px;
+			height: 120px;
+			transform: translate(-50%, -50%);
+			background: transparent;
+         	border: none;
+			display: block;
+			z-index: 12
+		}
+		
+		.startButton img {
+			max-width: 200px;
+		}
+ 	</style>
+</head>
+<body>
+	<canvas id="waterDropletCanvas"></canvas>
+ 	<img id="touchCloud" src="/Local/StempunkV3/Assets/PNG/Ollie.png" alt="Touch Cloud">
+	<div class="scene">
+		<img src="/Local/StempunkGit/Assets/Scene/Title.png" alt="Title scene">
+	</div>
+	<button class="startButton">
+		<img src="/Local/StempunkGit/Assets/PNG/Start.png" alt="Start">
+	</button>
+	<audio id="waterSound" src="/Local/StempunkGit/Assets/Audio/Water.mp3"></audio>
+	<div class="narrative"></div>
+	<script>
+     	const cloud = document.getElementById('touchCloud');
+     	const canvas = document.getElementById('waterDropletCanvas');
+     	const ctx = canvas.getContext('2d');
+		const startBtn = document.querySelector('.startButton');
+		const scene = document.querySelector('.scene img');
+		const narrative = document.querySelector('.narrative');
+		
+		narrative.textContent = "Collect the water droplets to form Ollie!";
+
+     	function resizeCanvas() {
+      		canvas.width = window.innerWidth;
+        	canvas.height = window.innerHeight;
+     	}
+     	resizeCanvas();
+     	window.addEventListener('resize', resizeCanvas);
+		
+		let droplets = [];
+		let touchPoints = [];
+		let cloudOpacity = 0.1;
+		let allDropletsCollected = false;
+		let started = false;
+		
+		function createDroplets() {
+			for (let i = 0; i < 8; i++) {
+				droplets.push({
+					x: Math.random() * (canvas.width - 20),
+					y: Math.random() * (canvas.height - 50),
+					radius: 20,
+					collected: false
+				});
+			}
+		}
+		
+		function drawDroplet(droplet) {
+			if (droplet.collected) return;
+		
+			ctx.beginPath();
+			ctx.arc(droplet.x, droplet.y, droplet.radius, 0, Math.PI * 2);
+			ctx.fillStyle = '#4D96E3';
+			ctx.fill();
+			
+			ctx.beginPath();
+			ctx.arc(droplet.x - droplet.radius/3, droplet.y - droplet.radius/3, droplet.radius/4, 0, Math.PI * 2);
+			ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+			ctx.fill();
+		}
+		
+		function draw() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			
+			droplets.forEach(drawDroplet);
+			
+			requestAnimationFrame(draw);
+		}
+		
+		function checkCollisions(cloudX, cloudY) {
+			droplets.forEach(droplet => {
+				if (!droplet.collected) {
+					const dx = droplet.x - cloudX;
+					const dy = droplet.y - cloudY;
+					const dist = Math.sqrt(dx * dx + dy * dy);
+				
+					if (dist < cloud.width/2 + droplet.radius) {
+						droplet.collected = true;
+						cloudOpacity = Math.min(1, cloudOpacity + 0.1);
+						cloud.style.opacity = cloudOpacity;
+						
+						const waterSound = new Audio('/Local/StempunkV3/Assets/Audio/Water.mp3');
+            			waterSound.play();
+					}
+				}
+			});
+			
+			if (!allDropletsCollected && droplets.every(d => d.collected) && started) {
+				allDropletsCollected = true;
+				cloud.style.opacity = 1;
+
+				setTimeout(() => {
+				window.location.href = '/Local/StempunkGit/story.html';
+				}, 2000);
+			}
+		}
+
+     	function distance(point1, point2) {
+     		return Math.sqrt(
+         		Math.pow(point2.x - point1.x, 2) + 
+            	Math.pow(point2.y - point1.y, 2)
+ 			);
+     	}
+
+		function calculateRotationAngle(point1, point2) {
+			if (point1.x < point2.x){
+				return Math.atan2(point2.y - point1.y, point2.x - point1.x) * (180 / Math.PI);
+			} else {
+				return Math.atan2(point1.y - point2.y, point1.x - point2.x) * (180 / Math.PI);
+			}
+     	}
+
+     	function handleTouch(e) {
+    		e.preventDefault();
+       	touchPoints = [];
+            
+        	for (let i = 0; i < e.touches.length; i++) {
+        		touchPoints.push({
+            		x: e.touches[i].clientX,
+               	y: e.touches[i].clientY
+            	});
+        	}
+
+       	if (touchPoints.length === 2) {
+       		const dist = distance(touchPoints[0], touchPoints[1]);
+                
+            	if (dist >= 200 && dist <= 250) {
+            		const centerX = (touchPoints[0].x + touchPoints[1].x) / 2;
+               	const centerY = (touchPoints[0].y + touchPoints[1].y) / 2;
+              	const angle = calculateRotationAngle(touchPoints[0], touchPoints[1]);
+                    
+               	cloud.style.display = 'block';
+              	cloud.style.left = (centerX - 193) + 'px';
+              	cloud.style.top = (centerY - 195) + 'px';
+               	cloud.style.transform = `rotate(${angle}deg)`;
+					cloud.style.opacity = cloudOpacity;
+					
+					checkCollisions(centerX, centerY);
+           	}
+      		} 
+   		}
+
+     	document.addEventListener('touchstart', handleTouch);
+     	document.addEventListener('touchmove', handleTouch);
+     	document.addEventListener('touchend', handleTouch);
+
+		startBtn.addEventListener('touchstart', () => {
+			started = true;
+			createDroplets();
+			draw();
+			startBtn.style.display = 'none';
+			narrative.style.display = 'block';
+			scene.src = "/Local/StempunkGit/Assets/Scene/Sky.png";
+		});
+		
+	</script>
+</body>
+</html>
